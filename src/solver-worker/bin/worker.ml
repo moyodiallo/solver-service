@@ -67,7 +67,7 @@ type t = {
 
 let metrics = function
   | `Agent ->
-      let data = Prometheus.CollectorRegistry.(collect default) in
+      Prometheus.CollectorRegistry.(collect default) >>= fun data ->
       let content_type = "text/plain; version=0.0.4; charset=utf-8" in
       Lwt_result.return
         ( content_type,

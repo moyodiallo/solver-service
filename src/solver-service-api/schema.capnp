@@ -1,5 +1,8 @@
 
-@0x8f8a99339e493464;
+@0x9ac524e0ec04d45e;
+# !!! This id is the same with as the file
+# "https://github.com/ocurrent/ocaml-multicore-ci/blob/master/api/schema.capnp"
+# to avoid the Unimplemented Error
 
 interface Log {
   write @0 (msg :Text);

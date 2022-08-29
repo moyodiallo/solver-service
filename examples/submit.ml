@@ -103,7 +103,9 @@ let pipeline ~cluster vars () =
     in
     Solver_service_api.Worker.Solve_request.
       {
-        opam_repository_commit = Current_git.Commit_id.hash opam_repo;
+        opam_repository_commits =
+          ["github.com/ocaml/opam-repository",Current_git.Commit_id.hash opam_repo];
+
         root_pkgs = opamfiles;
         pinned_pkgs = [];
         platforms = [ ("os", vars) ];
