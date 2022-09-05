@@ -6,6 +6,7 @@ WORKDIR /src
 RUN opam install -y --deps-only .
 ADD --chown=opam . .
 RUN opam exec -- dune subst
+RUN opam config exec -- dune build ./_build/install/default/bin/solver-service
 RUN opam config exec -- dune build ./_build/install/default/bin/solver-worker
 
 FROM ubuntu:22.04
@@ -14,3 +15,4 @@ WORKDIR /var/lib/ocluster-worker
 ENTRYPOINT ["/usr/local/bin/solver-worker"]
 ENV PROGRESS_NO_TRUNC=1
 COPY --from=build /src/_build/install/default/bin/solver-worker /usr/local/bin/
+COPY --from=build /src/_build/install/default/bin/solver-service /usr/local/bin/
