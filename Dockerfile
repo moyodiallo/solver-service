@@ -14,5 +14,4 @@ RUN apt-get update && apt-get install docker.io libev4 curl gnupg2 git libsqlite
 WORKDIR /var/lib/ocluster-worker
 ENTRYPOINT ["/usr/local/bin/solver-worker"]
 ENV PROGRESS_NO_TRUNC=1
-COPY --from=build /src/_build/install/default/bin/solver-worker /usr/local/bin/
-COPY --from=build /src/_build/install/default/bin/solver-service /usr/local/bin/
+COPY --from=build /src/_build/install/default/bin/solver-worker /src/_build/install/default/bin/solver-service /usr/local/bin/

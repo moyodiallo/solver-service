@@ -16,6 +16,7 @@
   (ppx_deriving (>= 5.1))
   yojson
   lwt
+  lwt_ppx
   logs
   fmt
   solver-service-api
