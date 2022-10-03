@@ -66,10 +66,16 @@ let run_client ~package ~version ~opam_commit service =
       ()
   in
   let* opam_file = get_opam_file pv in
+
   let request =
     Solver_service_api.Worker.Solve_request.
       {
-        opam_repository_commits = ["https://github.com/ocaml/opam-repository.git",opam_commit];
+        (* the url(github.com/ocaml/opam) here is not a good one
+         * this is about illustrating the solver could fail easily
+         * with wrong request and stay in the state of not solving
+         *
+         * the good url is "github.com/ocaml/opam-repository"*)
+        opam_repository_commits = ["github.com/ocaml/opam",opam_commit];
         root_pkgs = [ (pv, opam_file) ];
         pinned_pkgs = [];
         platforms = [ (platform.os, platform) ];

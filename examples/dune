@@ -1,5 +1,5 @@
 (executables
- (names main submit)
+ (names main main_v2 submit)
  (libraries current_git capnp-rpc-unix solver-service-api solver-service
    logs.cli logs.fmt opam-0install ocluster-api current_github
    current_ocluster fmt.tty))

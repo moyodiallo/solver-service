@@ -35,6 +35,17 @@ module Solve_request = struct
   } [@@deriving yojson]
 end
 
+(** A request to select sets of packages for the builds. *)
+module Solve_request_v2 = struct
+  type t = {
+    opam_repository_commits : (string * string) list;
+    (** Pair of repo URL and commit hash, for each opam-repository to use. *)
+    root_pkgs : (string * string) list;         (** Name and contents of top-level opam files. *)
+    pinned_pkgs : (string * string) list;       (** Name and contents of other pinned opam files. *)
+    platforms : (string * Vars.t) list;         (** Possible build platforms, by ID. *)
+  } [@@deriving yojson]
+end
+
 (** The response from the solver. *)
 module Solve_response = struct
   type ('a, 'b) result = ('a, 'b) Stdlib.result =
