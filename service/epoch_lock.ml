@@ -11,15 +11,35 @@ type ('a, 'key) t = {
   mutable users : int; (* Zero unless active or draining *)
   create : 'key -> 'a Lwt.t;
   dispose : 'a -> unit Lwt.t;
+  output : out_channel;
 }
 
+let print_s t s =
+  output_string t.output s;
+  flush t.output
+
+let print_state t =
+  match t.current with
+  | `Idle -> print_s t "Idle\n"
+  | `Activating _ -> print_s t "Activating\n"
+  | `Active _ -> print_s t "Active\n"
+  | `Draining _ -> print_s t "Draining\n"
+
 let activate t epoch ~ready ~set_ready =
-  t.current <- `Activating ready;
-  t.create epoch >|= fun v ->
-  t.current <- `Active (epoch, v);
-  Lwt.wakeup_later set_ready ()
+      print_s t "start activate with: ";
+      print_state t;
+      t.current <- `Activating ready;
+      t.create epoch >|= fun v ->
+      t.current <- `Active (epoch, v);
+      print_s t "end activate with: ";
+      print_state t;
+      Lwt.wakeup_later set_ready ()
 
 let rec with_epoch t epoch fn =
+  let _ =
+    print_s t "enter with_epoch(handle request) with: ";
+    print_state t
+  in
   match t.current with
   | `Active (current_epoch, v) when current_epoch = epoch ->
       t.users <- t.users + 1;
@@ -51,4 +71,5 @@ let rec with_epoch t epoch fn =
       let ready, set_ready = Lwt.wait () in
       activate t epoch ~ready ~set_ready >>= fun () -> with_epoch t epoch fn
 
-let v ~create ~dispose () = { current = `Idle; users = 0; create; dispose }
+let v ~create ~dispose ~output () =
+  { current = `Idle; users = 0; create; dispose; output }

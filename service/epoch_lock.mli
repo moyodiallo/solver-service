@@ -9,6 +9,7 @@ type ('a, 'key) t
 val v :
   create:('key -> 'a Lwt.t) ->
   dispose:('a -> unit Lwt.t) ->
+  output:out_channel ->
   unit ->
   ('a, 'key) t
 (** [v ~create ~dispose ()] is an epoch lock that calls [create] to start a new

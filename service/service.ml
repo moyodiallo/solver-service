@@ -226,7 +226,7 @@ module Make (Opam_repo : Opam_repository_intf.S) = struct
 
   let v ~n_workers ~create_worker =
     let create commits = Epoch.create ~n_workers ~create_worker commits in
-    let t = Epoch_lock.v ~create ~dispose:Epoch.dispose () in
+    let t = Epoch_lock.v ~create ~dispose:Epoch.dispose ~output:stdout () in
     let module X = Solver_service_api.Raw.Service.Solver in
     Lwt.return
     @@ X.local
